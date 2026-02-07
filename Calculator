@@ -1,0 +1,233 @@
+<!DOCTYPE html
+<html lang="en">
+<head>
+    
+    <title>Simple Calculator</title>
+
+    
+    <style>
+        
+
+          body {
+            font-family: Arial,sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f0f0f0;
+          }
+
+          h1{
+
+            color: #333;
+          }
+
+          
+
+          .calculator{
+            width: 250px;
+            margin:0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+          }
+             
+
+          #display{
+            width:#222;
+            color: white;
+            font-size: 24px;
+            padding: 10px;
+            text-align: right;
+            margin-bottom: 10px;
+            border-radius:5px;
+            min-height:40px;
+
+          }
+
+         
+
+          .button{
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 5px;
+            
+
+          }
+
+          button{
+            
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            
+          }
+
+           button:hover{
+            opacity: 0.8;
+            
+
+          }
+
+          
+
+          .number{
+            background-color:#e0e0e0;
+            
+
+          }
+
+
+          .operator{
+            background-color: #f0a500;
+            color: white;
+          }
+
+          .equal{
+            background-color: #008cba;
+            color: white;
+            grid-column: span 2;
+
+          }
+
+          .clear{
+            background-color: #95a5a6;
+            color: white;
+          }
+
+          .instruction{
+            margin-top: 20px;
+            color: #666;
+            font-size:14px;
+          }
+     </style>
+</head>
+<body>
+    <h1>Simple Calculator</h1>
+            
+            <div class="calculator">
+            
+                <div class="text" id="display" >0</div>
+            </div>
+
+            <div class="buttons">
+
+                <button class= "clear" onclick="clearDisplay()">C</button>
+                 <button class= "operator" onclick="appendToDisplay('/')">/</button>
+                <button class= "operator" onclick="appendToDisplay('*')">x</button>
+
+                <button class= "number" onclick="appendToDisplay()">7</button>
+                <button class= "number" onclick="appendToDisplay()">8</button>
+                <button class= "number" onclick="appendToDisplay()">9</button>
+                <button class= "operator" onclick="appendToDisplay('-')">-</button>
+
+                <button class= "number" onclick="appendToDisplay()">4</button>
+                <button class= "number" onclick="appendToDisplay()">5</button>
+                <button class= "number" onclick="appendToDisplay()">6</button>
+                <button class= "operator" onclick="appendToDisplay('+')">+</button>
+
+                <button class= "number" onclick="appendToDisplay()">1</button>
+                <button class= "number" onclick="appendToDisplay()">2</button>
+                <button class= "number" onclick="appendToDisplay()">3</button>
+                <button class= "operator" onclick="appendToDisplay()"style="grid-row: span 2;">=</style></button>
+
+                <button class= "number" onclick="appendToDisplay('0')">0</button>
+                <button class= "number" onclick="appendToDisplay('.')">.</button>
+             </div>
+
+             <div class="calculator-footer">
+                    <p><i class="fas fa-code"></i> built with HTML,CSS & JavaScript</p>
+                </div>
+            </div>     
+            
+            <script>
+                let display= document.getElementById('display');
+                let historyDisplay= document.getElementById('history');
+                let currentInput= '';
+                let previousInput= '';
+                let operator= null;
+                let shouldResetDisplay= false; 
+
+                function appendToDisplay(value){
+                    if (shouldResetDisplay){
+                    display.value='';
+                    shouldResetDisplay=false;
+
+                    }
+
+                if (display.value==='0'&& value !=='.'){
+                    display.value= value;
+                } else{
+                    if(value==='.' && display.value.includes('.')){
+                        return;
+
+
+                    }
+
+                        if (display.value.length<12){
+                            display.value += value;
+
+                    }
+
+                   }    
+                   currentInput=display.value;
+
+            }
+
+            
+        function clearDisplay() {
+            display.textContent = '0';
+        }
+        
+       
+        function calculate() {
+            try {
+               
+                let expression = display.textContent.replace('×', '*');
+                
+                
+                let result = eval(expression);
+                
+                
+                display.textContent = result;
+            } catch (error) {
+                
+                display.textContent = 'Error';
+            }
+        }
+        
+        
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            
+           
+            if (key >= '0' && key <= '9') {
+                appendToDisplay(key);
+            }
+            
+            else if (key === '.') {
+                appendToDisplay('.');
+            }
+            
+            else if (['+', '-', '*', '/'].includes(key)) {
+                // Convert * to × for display
+                if (key === '*') {
+                    appendToDisplay('×');
+                } else {
+                    appendToDisplay(key);
+                }
+            }
+            
+            else if (key === 'Enter' || key === '=') {
+                event.preventDefault();
+                calculate();
+            }
+            
+            else if (key === 'Escape') {
+                clearDisplay();
+            }
+        });
+    </script>
+</body>
+</html>
